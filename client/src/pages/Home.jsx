@@ -1,60 +1,81 @@
-import { List, ListIcon, Tab, TabList, TabPanel, TabPanels, Tabs, ListItem } from "@chakra-ui/react"
-import { EmailIcon, StarIcon, ChatIcon, CheckCircleIcon, WarningIcon } from "@chakra-ui/icons"
+import { Flex, Button, Text, Center, Grid, Input, InputGroup, InputRightElement, InputLeftElement, Box } from "@chakra-ui/react"
+import { EmailIcon } from "@chakra-ui/icons"
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from '@chakra-ui/react'
+
+import { useState, useRef } from 'react';
+import CSVDataTable from "../components/CSVDataTable";
+
 
 export default function Home() {
-  return (
-    <Tabs mt="40px" p="20px" colorScheme="purple" variant="enclosed">
-      <TabList>
-        <Tab _selected={{ color: "white", bg: "purple.400" }}>
-          Account Info
-        </Tab>
-        <Tab _selected={{ color: "white", bg: "purple.400" }}>
-          Task History
-        </Tab>
-      </TabList>
+  const [csvData, setCsvData] = useState([]);
 
-      <TabPanels>
-        <TabPanel>
-          <List spacing={4}>
-            <ListItem>
-              <ListIcon as={EmailIcon} />
-                Email: miau@gmail.com
-            </ListItem>
-            <ListItem>
-              <ListIcon as={ChatIcon} />
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam quo pariatur facere consequatur voluptatum explicabo consectetur illo, distinctio, dolore corporis assumenda maiores cumque tempore error accusantium quod laudantium, nisi exercitationem!
-            </ListItem>
-            <ListItem>
-              <ListIcon as={StarIcon} />
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non eaque nesciunt sint. Excepturi dolor natus, vero necessitatibus voluptates laboriosam. Veritatis quos voluptatem dolorem dolor molestiae ea praesentium voluptates, itaque recusandae.
-            </ListItem>
-          </List>
-        </TabPanel>
-        <TabPanel>
-        <List spacing={4}>
-            <ListItem>
-              <ListIcon as={CheckCircleIcon} color="teal.400" />
-                Email: miau@gmail.com
-            </ListItem>
-            <ListItem>
-              <ListIcon as={CheckCircleIcon} color="teal.400"  />
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam quo pariatur facere consequatur voluptatum explicabo consectetur illo, distinctio, dolore corporis assumenda maiores cumque tempore error accusantium quod laudantium, nisi exercitationem!
-            </ListItem>
-            <ListItem>
-              <ListIcon as={WarningIcon} color="red.400"  />
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non eaque nesciunt sint. Excepturi dolor natus, vero necessitatibus voluptates laboriosam. Veritatis quos voluptatem dolorem dolor molestiae ea praesentium voluptates, itaque recusandae.
-            </ListItem>
-            <ListItem>
-              <ListIcon as={CheckCircleIcon} color="teal.400"  />
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam quo pariatur facere consequatur voluptatum explicabo consectetur illo, distinctio, dolore corporis assumenda maiores cumque tempore error accusantium quod laudantium, nisi exercitationem!
-            </ListItem>
-            <ListItem>
-              <ListIcon as={WarningIcon} color="teal.400"  />
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non eaque nesciunt sint. Excepturi dolor natus, vero necessitatibus voluptates laboriosam. Veritatis quos voluptatem dolorem dolor molestiae ea praesentium voluptates, itaque recusandae.
-            </ListItem>
-          </List>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const csvText = e.target.result;
+        parseCSV(csvText);
+      };
+
+      reader.readAsText(file);
+    }
+  };
+
+  const parseCSV = (csvText) => {
+    const lines = csvText.split("\n");
+    const headers = lines[0].split(",");
+    const parsedData = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const currentLine = lines[i].split(",");
+
+      if (currentLine.length === headers.length) {
+        const row = {};
+        for (let j = 0; j < headers.length; j++) {
+          row[headers[j].trim()] = currentLine[j].trim();
+        }
+        parsedData.push(row);
+      }
+    }
+
+    setCsvData(parsedData);
+  };
+
+
+  const inputStyle = {
+
+  };
+
+  return (
+    <Grid alignItems="center" justifyContent="center"  templateColumns='repeat(2, 1fr)' gap={6}>
+      <Box>
+        <input style={{ marginBottom: "20px" }}
+          type="file"
+          onChange={handleFileChange}
+          accept=".csv"
+        />
+      </Box>
+      <Box mb="20px">
+        <Button>
+          <Text>Atualizar</Text>
+        </Button>
+      </Box>
+      <Box>
+      <CSVDataTable data={csvData} />
+      </Box>
+    </Grid>
   )
 }
