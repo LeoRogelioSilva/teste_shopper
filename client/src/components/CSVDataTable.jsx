@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from '../services/api';
-import { Button } from "@chakra-ui/react";
+import { Button, Flex, Grid } from "@chakra-ui/react";
+import ErrorCircles from "./ErrorCircle";
 
 const CSVDataTable = ({ data }) => {
     const [allProducts, setAllProducts] = useState([]);
@@ -34,7 +35,7 @@ const CSVDataTable = ({ data }) => {
             const dadosValidados = data.map((objeto) => {
                 const isValid = validarDados(objeto);
                 const bd = allProducts.find((obj) => obj.code == objeto.product_code)
-                console.log(typeof (bd) === "object")
+                
                 if (typeof (bd) === "object") {
                     return {
                         ...objeto,
@@ -54,8 +55,17 @@ const CSVDataTable = ({ data }) => {
     }, [data, allProducts, allPacks]);
 
     function getRowStyle(value) {
-        if (value.product_code == "") {
-            return { backgroundColor: '#' }
+        if (value.product_code === "" || value.new_price === "") {
+            return { borderBottom: '3px solid #8B0000' }
+        }
+        if(value.name === "Produto não cadastrado"){
+            return { borderBottom: '3px solid #FFA500' }
+        }
+        if(!/^[\d\s.]*$/.test(value.new_price)){
+            return { borderBottom: '3px solid #0000AA' }
+        }
+        if(value.new_price < value.cost_price || value.new_price > (value.sales_price + value.sales_price*0.1)){
+            return {borderBottom: '3px solid #FF1493'}
         }
         return {
             backgroundColor: '',
@@ -74,7 +84,7 @@ const CSVDataTable = ({ data }) => {
     const headers = validatedData.length > 0 ? Object.keys(validatedData[0]) : [];
 
     return (
-        <>
+        <Grid  alignItems="center" justifyContent="center">
             {validatedData.length === 0 ? (
                 <p>No data available.</p>
             ) : (
@@ -102,8 +112,9 @@ const CSVDataTable = ({ data }) => {
                     </tbody>
                 </table>
             )}
+            <ErrorCircles></ErrorCircles>
             <Button>Atualizar</Button>
-        </>
+        </Grid>
     );
 };
 
@@ -136,6 +147,7 @@ const tableCellStyle = {
 const tableRowStyle = {
     backgroundColor: '#f7f7f7', 
     margin: "10px",
+    padding: "5px",
     textAlign: 'center',
     transition: 'background-color 0.2s', // Transição suave da cor de fundo
     cursor: 'pointer'

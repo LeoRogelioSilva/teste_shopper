@@ -51,15 +51,15 @@ export default function Home() {
   };
 
   return (
-    <Grid alignItems="center" justifyContent="center"  templateColumns='repeat(1, 1fr)' gap={6}>
-      <Box>
+    <Grid  alignItems="center" justifyContent="center" gap={6}>
+      <Box textAlign="center">
         <input style={{ marginBottom: "20px" }}
           type="file"
           onChange={handleFileChange}
           accept=".csv"
         />
       </Box>
-      <Box mb="20px">
+      <Box mb="20px" textAlign="center">
         {showValidarButton && <Button onClick={handleValidateClick}>Validar</Button>}
       </Box>
       <Box>
