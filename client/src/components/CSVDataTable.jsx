@@ -31,11 +31,15 @@ const CSVDataTable = ({ data }) => {
                     if (objeto.product_code === "" || objeto.new_price === null) {
                         setIsDataValid(false)
                     }
-                    if (!/^[\d\s.]*$/.test(objeto.new_price)
-                        || objeto.new_price < objeto.cost_price
+                    if (objeto.new_price < objeto.cost_price
                         || objeto.new_price > (objeto.sales_price + objeto.sales_price * 0.1)
                         || objeto.new_price < (objeto.sales_price - objeto.sales_price * 0.1)) {
                         setIsDataValid(false)
+                    }
+                    if(!/^\d*\.\d{2}$/.test(objeto.new_price)){
+                        if(!isNaN(parseInt(objeto.new_price))){
+                            objeto.new_price = objeto.new_price + ".00"
+                        }
                     }
                     return {
                         ...objeto,
@@ -62,7 +66,7 @@ const CSVDataTable = ({ data }) => {
         if (value.name === "Produto não cadastrado") {
             return { borderBottom: '3px solid #FFA500' }
         }
-        if (!/^[\d\s.]*$/.test(value.new_price)) {
+        if (!/^\d*\.\d{2}$/.test(value.new_price)) {
             return { borderBottom: '3px solid #0000AA' }
         }
         if (parseFloat(value.new_price) < parseFloat(value.cost_price)
@@ -117,6 +121,8 @@ const CSVDataTable = ({ data }) => {
 
     const headers = validatedData.length > 0 ? Object.keys(validatedData[0]) : [];
 
+    const headersLabel = ["Codigo", "Nome", "Preço Atual", "Novo Preço"]
+
     return (
         <Grid alignItems="center" justifyContent="center">
             {validatedData.length === 0 ? (
@@ -126,21 +132,32 @@ const CSVDataTable = ({ data }) => {
                     {/* Renderize a tabela com os dados validados */}
                     <thead>
                         <tr>
-                            {headers.map((header, index) => (
-                                <th key={index} style={tableHeaderStyle}>
+                            {headersLabel.map((header, index) => (
+                                <th
+                                    key={index}
+                                    style={tableHeaderStyle}
+                                >
                                     {header}
                                 </th>
+
                             ))}
                         </tr>
                     </thead>
                     <tbody>
                         {validatedData.map((row, index) => (
                             <tr key={index} style={{ ...tableRowStyle, ...getRowStyle(row) }}>
-                                {headers.map((header, columnIndex) => (
-                                    <td key={columnIndex} style={tableCellStyle}>
-                                        <span title={getTooltip(row[header])}>{row[header]}</span>
-                                    </td>
-                                ))}
+                                <td style={tableCellStyle}>
+                                    <span >{row.product_code}</span>
+                                </td>
+                                <td style={tableCellStyle}>
+                                    <span >{row.name}</span>
+                                </td>
+                                <td style={tableCellStyle}>
+                                    <span >{row.actual_price}</span>
+                                </td>
+                                <td style={tableCellStyle}>
+                                    <span >{row.new_price}</span>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -192,7 +209,7 @@ const tableHeaderStyle = {
     backgroundColor: "#0dab77",
     borderBottom: "1px solid #ddd",
     padding: "15px",
-    textAlign: "left",
+    textAlign: "center",
 };
 
 const tableCellStyle = {
