@@ -164,7 +164,7 @@ const CSVDataTable = ({ data }) => {
                 </table>
             )}
             <ErrorCircles />
-            <Tooltip label="Os dados contém erros." isOpen={!isDataValid}>
+            <Tooltip label="Os dados contém erros. Por favor, verifique o arquivo e submeta novamente." isOpen={!isDataValid}>
                 <Box
                     as='button'
                     height='40px'

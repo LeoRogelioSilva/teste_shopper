@@ -62,7 +62,7 @@ app.put('/products', async (req, res) => {
                    
                    packProduct.sales_price = parseFloat(packProduct.sales_price) - parseFloat(actualProduct.sales_price)*parseInt(packOrKit.qty)
                    packProduct.sales_price += parseFloat(updatedProduct.sales_price)*parseInt(packOrKit.qty)
-
+                    updateProduct(packProduct.code, packProduct.sales_price);
                 }
 
             }

@@ -37,9 +37,8 @@ export default function Home() {
 
       if (currentLine.length === headers.length) {
         const row = {};
-        for (let j = 0; j < headers.length; j++) {
-          row[headers[j].trim()] = currentLine[j].trim();
-        }
+        row[headers[0].trim()] = currentLine[0].trim();
+        row[headers[1].trim()] = parseFloat(currentLine[1].trim());
         parsedData.push(row);
       }
     }
