@@ -3,7 +3,7 @@
 ## Instalação
 
 ## Banco de dados
-### 1. Instale o <a href="https://dev.mysql.com/downloads/mysql/">MySQL Server</a>
+### 1. Instale o <a href="https://dev.mysql.com/downloads/mysql/">MySQL Server</a> nas versões 5 ou 8
 #### a. Siga as instruções padrões do Sql Server, e quando estiver em 'Configuração do servidor MySQL', lembre-se de definir a porta como padrão 3306 e guarde bem a senha do usuário root.
 #### b. Continue a instalação normalmente e clique em finish no final.
 ### 2. Instale um SGBD
