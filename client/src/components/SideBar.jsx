@@ -1,22 +1,17 @@
 import { List, ListIcon, ListItem } from '@chakra-ui/react'
-import {AtSignIcon, CalendarIcon, EditIcon} from "@chakra-ui/icons"
+import { AtSignIcon, CalendarIcon, EditIcon } from "@chakra-ui/icons"
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 export default function SideBar() {
     return (
         <List color="white" fontSize="1.2em" spacing={4}>
             <ListItem>
-                <NavLink to="/">
-                    <ListIcon as={CalendarIcon} color="white" />
-                    Dashboard
-                </NavLink>
-            </ListItem>
-            <ListItem>
-                <NavLink to="/">
+                <a href="https://github.com/LeoRogelioSilva/teste_shopper" target="_blank">
                     <ListIcon as={AtSignIcon} color="white" />
-                    Profile
-                </NavLink>
+                    Repositório GitHub
+                </a>
+
             </ListItem>
         </List>
     )

@@ -60,7 +60,7 @@ export default function Home() {
         />
       </Box>
       <Box mb="20px" textAlign="center">
-        {showValidarButton && <Button onClick={handleValidateClick}>Validar</Button>}
+        {showValidarButton && <Button backgroundColor="primary" colorScheme="green" color="gray.100" onClick={handleValidateClick}>Validar</Button>}
       </Box>
       <Box>
         {showDataTable && <CSVDataTable data={csvData} />} 

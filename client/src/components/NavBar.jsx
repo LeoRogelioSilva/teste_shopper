@@ -5,8 +5,8 @@ import React from 'react'
 export default function NavBar() {
 
     return (
-        <Flex as="nav" p="10px" mb="40px" alignItems="center" textAlign="center" gap="30px">
-            <Heading as="h1" textAlign="center" >
+        <Flex as="nav" p="10px" mb="40px" alignItems="center" justifyContent="center" gap="30px">
+            <Heading as="h1" textAlign="center">
                 Shopper Test
             </Heading>
         </Flex>

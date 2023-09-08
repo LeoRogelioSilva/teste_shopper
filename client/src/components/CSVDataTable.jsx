@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import api from '../services/api';
-import { Button, Flex, Grid } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, Tooltip } from "@chakra-ui/react";
 import ErrorCircles from "./ErrorCircle";
 
 const CSVDataTable = ({ data }) => {
     const [allProducts, setAllProducts] = useState([]);
     const [allPacks, setAllPacks] = useState([]);
     const [validatedData, setValidatedData] = useState([]);
+    const [isDataValid, setIsDataValid] = useState([true])
 
     useEffect(() => {
         async function fetchData() {
@@ -20,23 +21,21 @@ const CSVDataTable = ({ data }) => {
         fetchData();
     }, []);
 
-    function validarDados(objeto) {
-        // Realize as validações aqui, utilizando allProducts e allPacks se necessário
-        // Exemplo: Verifique se objeto.product_code e objeto.new_price são válidos
-        if (objeto.product_code && objeto.new_price) {
-            return "true";
-        }
-        return "false";
-    }
-
     useEffect(() => {
-        // Aplica a validação aos dados quando allProducts e allPacks estiverem prontos
         if (allProducts.length > 0 && allPacks.length > 0) {
             const dadosValidados = data.map((objeto) => {
-                const isValid = validarDados(objeto);
                 const bd = allProducts.find((obj) => obj.code == objeto.product_code)
-                
+
                 if (typeof (bd) === "object") {
+                    if (objeto.product_code === "" || objeto.new_price === null) {
+                        setIsDataValid(false)
+                    }
+                    if (!/^[\d\s.]*$/.test(objeto.new_price)
+                        || objeto.new_price < objeto.cost_price
+                        || objeto.new_price > (objeto.sales_price + objeto.sales_price * 0.1)
+                        || objeto.new_price < (objeto.sales_price - objeto.sales_price * 0.1)) {
+                        setIsDataValid(false)
+                    }
                     return {
                         ...objeto,
                         actual_price: bd.sales_price,
@@ -44,6 +43,7 @@ const CSVDataTable = ({ data }) => {
                         name: bd.name,
                     }
                 }
+                setIsDataValid(false)
                 return {
                     ...objeto,
                     actual_price: "",
@@ -58,20 +58,18 @@ const CSVDataTable = ({ data }) => {
         if (value.product_code === "" || value.new_price === "") {
             return { borderBottom: '3px solid #8B0000' }
         }
-        if(value.name === "Produto não cadastrado"){
+        if (value.name === "Produto não cadastrado") {
             return { borderBottom: '3px solid #FFA500' }
         }
-        if(!/^[\d\s.]*$/.test(value.new_price)){
+        if (!/^[\d\s.]*$/.test(value.new_price)) {
             return { borderBottom: '3px solid #0000AA' }
         }
-        if(value.new_price < value.cost_price || value.new_price > (value.sales_price + value.sales_price*0.1)){
-            return {borderBottom: '3px solid #FF1493'}
+        if (parseFloat(value.new_price) < parseFloat(value.cost_price)
+            || value.new_price > (value.sales_price + value.sales_price * 0.1)
+            || value.new_price < (value.sales_price - value.sales_price * 0.1)) {
+            return { borderBottom: '3px solid #FF1493' }
         }
-        return {
-            backgroundColor: '',
-            cursor: 'warning'
-        };
-
+        return { borderBottom: '3px solid #ddd  ' }
     }
 
     function getTooltip(value) {
@@ -81,10 +79,40 @@ const CSVDataTable = ({ data }) => {
         return '';
     }
 
+    const handleAtualizar = () => {
+        saveDataToApi()
+    }
+
+    function formatarDados() {
+        let dados = validatedData.map((produto) => {
+            return {
+                code: produto.product_code,
+                name: produto.name,
+                cost_price: produto.cost_price,
+                sales_price: produto.new_price
+            }
+        })
+        return dados
+    }
+
+    const saveDataToApi = async () => {
+        const dadosFormatados = formatarDados()
+
+        const productsResponse = await api.put('products', { products: dadosFormatados })
+            .then(response => {
+                console.log(response.data); // Mensagem de sucesso ou outra resposta do servidor
+            })
+            .catch(error => {
+                console.error(error);
+            });;
+
+    };
+
+
     const headers = validatedData.length > 0 ? Object.keys(validatedData[0]) : [];
 
     return (
-        <Grid  alignItems="center" justifyContent="center">
+        <Grid alignItems="center" justifyContent="center">
             {validatedData.length === 0 ? (
                 <p>No data available.</p>
             ) : (
@@ -103,7 +131,7 @@ const CSVDataTable = ({ data }) => {
                         {validatedData.map((row, index) => (
                             <tr key={index} style={{ ...tableRowStyle, ...getRowStyle(row) }}>
                                 {headers.map((header, columnIndex) => (
-                                    <td key={columnIndex} style={{tableCellStyle}}>
+                                    <td key={columnIndex} style={tableCellStyle}>
                                         <span title={getTooltip(row[header])}>{row[header]}</span>
                                     </td>
                                 ))}
@@ -112,8 +140,32 @@ const CSVDataTable = ({ data }) => {
                     </tbody>
                 </table>
             )}
-            <ErrorCircles></ErrorCircles>
-            <Button>Atualizar</Button>
+            <ErrorCircles />
+            <Tooltip label="Os dados contém erros." isOpen={!isDataValid}>
+                <Box
+                    as='button'
+                    height='40px'
+                    lineHeight='1.2'
+                    px='8px'
+                    borderRadius='5px'
+                    fontSize='14px'
+                    fontWeight='semibold'
+                    backgroundColor='#38a169'
+                    color='white'
+                    my="20px"
+                    pointerEvents={isDataValid ? "auto" : "none"}
+
+                    _hover={{ bg: '#2f855a' }}
+                    _active={{
+                        bg: '#dddfe2',
+                        transform: 'scale(0.98)',
+                        borderColor: '#bec3c9',
+                    }}
+                    onClick={handleAtualizar}
+                >
+                    Atualizar
+                </Box>
+            </Tooltip>
         </Grid>
     );
 };
@@ -138,14 +190,15 @@ const tableHeaderStyle = {
 };
 
 const tableCellStyle = {
-    fontSize: "14px",
+    fontSize: "15px",
     fontWeight: 500,
     borderBottom: "1px solid #ddd",
+    lineHeight: "2",
     padding: "15px"
-};  
+};
 
 const tableRowStyle = {
-    backgroundColor: '#f7f7f7', 
+    backgroundColor: '#f7f7f7',
     margin: "10px",
     padding: "5px",
     textAlign: 'center',

@@ -20,19 +20,19 @@ const ErrorCircles = () => {
     <Flex gap={4} my="20px" alignItems="center" justifyContent="center">
       <ErrorCircle
         color="#8B0000"
-        description="Não tem code ou price"
+        description="Produtos sem código ou sem preço"
       />
       <ErrorCircle
         color="#FFA500"
-        description="Não encontrado no BD"
+        description="Produto não encontrado na base de dados"
       />
       <ErrorCircle
         color="#0000AA"
-        description="Preços não válidos"
+        description="Preços inválidos"
       />
       <ErrorCircle
         color="#FF1493"
-        description="Valor fora do limite"
+        description="Valor com diferença maior que 10% do valor atual"
       />
     </Flex>
   );

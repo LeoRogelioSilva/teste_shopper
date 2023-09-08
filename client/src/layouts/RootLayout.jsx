@@ -6,11 +6,12 @@ import SideBar from "../components/SideBar"
 export default function RootLayout() {
   return (
     <Grid templateColumns="repeat(6, 1fr)" bg="gray.50">
-      <GridItem as="aside" colSpan={{ base: 6, lg: 2, xl: 1 }} bg="primary"
+      <GridItem as="aside" colSpan={{ base: 6, lg: 2, xl: 2  }} bg="primary"
       minHeight={{lg: '100vh'}} 
       p={{base: '20px', lg: '30px'}}>
+        <SideBar />
       </GridItem>
-      <GridItem as="main" colSpan={{ base: 6, lg: 4, xl: 5 }} p="40px">
+      <GridItem as="main" colSpan={{ base: 6, lg: 4, xl: 4 }} p="40px">
 
         <NavBar />
         <Outlet />
