@@ -12,7 +12,6 @@ export default function RootLayout() {
         <SideBar />
       </GridItem>
       <GridItem as="main" colSpan={{ base: 6, lg: 4, xl: 4 }} p="40px">
-
         <NavBar />
         <Outlet />
       </GridItem>

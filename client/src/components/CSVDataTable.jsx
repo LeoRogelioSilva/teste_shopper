@@ -3,21 +3,22 @@ import api from '../services/api';
 import { Box, Button, Flex, Grid, Tooltip } from "@chakra-ui/react";
 import ErrorCircles from "./ErrorCircle";
 
+
 const CSVDataTable = ({ data }) => {
     const [allProducts, setAllProducts] = useState([]);
     const [allPacks, setAllPacks] = useState([]);
     const [validatedData, setValidatedData] = useState([]);
     const [isDataValid, setIsDataValid] = useState([true])
 
+    async function fetchData() {
+        const productsResponse = await api.get('products');
+        setAllProducts(productsResponse.data);
+
+        const packsResponse = await api.get('packs');
+        setAllPacks(packsResponse.data);
+    }
+
     useEffect(() => {
-        async function fetchData() {
-            const productsResponse = await api.get('products');
-            setAllProducts(productsResponse.data);
-
-            const packsResponse = await api.get('packs');
-            setAllPacks(packsResponse.data);
-        }
-
         fetchData();
     }, []);
 
@@ -100,12 +101,17 @@ const CSVDataTable = ({ data }) => {
 
         const productsResponse = await api.put('products', { products: dadosFormatados })
             .then(response => {
-                console.log(response.data); // Mensagem de sucesso ou outra resposta do servidor
+                console.log(response.data);
+
+                alert("Sucesso!");
+
+                //atualiza página
+                setTimeout(window.location.reload(), 2000);
+
             })
             .catch(error => {
                 console.error(error);
-            });;
-
+            });
     };
 
 
