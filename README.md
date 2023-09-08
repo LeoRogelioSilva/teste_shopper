@@ -10,7 +10,7 @@
 #### a. Recomendo o uso do <a href="https://dbeaver.io/download/">DBeaever</a> ou <a href="https://dev.mysql.com/downloads/workbench/">WorkBench</a>
 #### b. Siga a instalação sugerida
 ### 3. Crie a conexão e o banco de dados
-#### a. Finalizada a instalação, crie uma nova conexão usando host 'localhost', porta 3306, usuário 'root' e use a senha definida na instalação do MySQL
+#### a. Finalizada a instalação, crie uma nova conexão MySQL usando host 'localhost', porta 3306, usuário 'root' e use a senha definida na instalação do MySQL
 #### b. Entre na conexão criada e abra um novo Script SQL
 #### c. Copie o <a href="https://github.com/LeoRogelioSilva/teste_shopper/blob/main/server/db/database.sql"> script de iniciação do banco de dados disponível neste repositório em server/db/database.sql</a>
 #### d. Cole na página de Script sql do seu SGBD e execute o script
