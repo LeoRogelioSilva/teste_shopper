@@ -16,3 +16,36 @@
 #### d. Cole na página de Script sql do seu SGBD e execute o script
 
 #### Pronto! Banco de dados instalado e operante!
+
+## Clone do repositório
+#### Os arquivos de Back End e Front End estão neste repositório, em ./server e ./client respectivamente
+### - Faça o clone do projeto em qualquer diretório da sua máquina com o comando: 
+``` bash
+git clone https://github.com/LeoRogelioSilva/teste_shopper
+```
+
+### - Edite o arquivo ./server/src/connection.js e altere APENAS o campo password com a senha do seu SQL Server
+
+## Instalação do Back End
+### 1. Abra um terminal na pasta ./server
+### 2. Instale as dependências do projeto:
+```bash
+npm install
+```
+### 3. Inicie o servidor Back End:
+```bash
+npm run start
+```
+
+## Instalação do Front End
+### 1. Abra um terminal na pasta ./client
+### 2. Instale as dependências do projeto:
+```bash
+npm install
+```
+### 3. Inicie o servidor Front End:
+```bash
+npm run start
+```
+
+## Pronto! Todo o projeto está instalado e configurado!
