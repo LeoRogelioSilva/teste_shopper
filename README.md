@@ -19,7 +19,7 @@
 
 ## Clone do repositório
 #### Os arquivos de Back End e Front End estão neste repositório, em ./server e ./client respectivamente
-### - Faça o clone do projeto em qualquer diretório da sua máquina com o comando: 
+### - Faça o clone do projeto na sua área de trabalho: 
 ``` bash
 git clone https://github.com/LeoRogelioSilva/teste_shopper
 ```
