@@ -50,3 +50,4 @@ npm run start
 ```
 
 ## Pronto! Todo o projeto está instalado e configurado!
+## Acesse <a href="http://127.0.0.1:5173/"> Aqui </a> para ver o projeto instalado rodando
